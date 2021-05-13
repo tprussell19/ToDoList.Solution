@@ -1,21 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using ToDoList.Models;
+using System.Collections.Generic;
 
 namespace ToDoList.Controllers
 {
   public class ItemsController : Controller
   {
 
-    [HttpGet("/items")]
-    public ActionResult Index()
-    {
-      List<Item> allItems = Item.GetAll();
-      return View(allItems);
-    }
-
     [HttpGet("/items/new")]
-    public ActionResult New()
+    public ActionResult CreateForm()
     {
       return View();
     }
@@ -34,11 +27,15 @@ namespace ToDoList.Controllers
       return View();
     }
 
-    [HttpGet("/items/{id}")]
-    public ActionResult Show(int id)
+    [HttpGet("/categories/{categoryId}/items/{itemId}")]
+    public ActionResult Show(int categoryId, int itemId)
     {
-      Item foundItem = Item.Find(id);
-      return View(foundItem);
+      Item item = Item.Find(itemId);
+      Category category = Category.Find(categoryId);
+      Dictionary<string, object> model = new Dictionary<string, object>();
+      model.Add("item", item);
+      model.Add("category", category);
+      return View(model);
     }
   }
 }
